@@ -1,4 +1,5 @@
 from app.helper.utils import flip_a_coin
+
 from app.models.building import Building 
 from app.models.player_type import PlayerType
 
@@ -9,7 +10,7 @@ class Player(PlayerType):
 
 
     def buy_building(self, building: Building) -> bool:
-        print(f"{building.building_id} - {building.selling_price}".upper())
+        
         if self.behavior == "cauteloso":
             remaining_cash: int = self.cash - building.selling_price
             if remaining_cash >= 80:

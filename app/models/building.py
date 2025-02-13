@@ -1,7 +1,7 @@
 class Building:
 
-    def __init__(self, building_id: str, selling_price: int, rent_price: int):
-        self.building_id: str = building_id 
+    def __init__(self, position: int, selling_price: int, rent_price: int):
+        self.position: int = position 
         self.selling_price: int = selling_price 
         self.rent_price: int = rent_price
         self.owner: str = None
