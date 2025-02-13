@@ -1,7 +1,7 @@
 from app.models.building import Building
 
 properties: list = [
-    Building(position=1, selling_price=666, rent_price=15),
+    Building(position=1, selling_price=6, rent_price=15),
     Building(position=2, selling_price=150, rent_price=23),
     Building(position=3, selling_price=219, rent_price=37),
     Building(position=4, selling_price=312, rent_price=29),

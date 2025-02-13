@@ -19,18 +19,14 @@ class Player(PlayerType):
 
         elif self.behavior == "aleatorio":
             if flip_a_coin():
-                
                 return self.to_buy(building=building)
             return False
 
         elif self.behavior == "exigente":
-            print(f"{building.rent_price}")
             if building.rent_price > 50:
-                print("exigente")
                 return self.to_buy(building=building)
             return False
 
         elif self.behavior == "impulsivo":
-            print("impulsivo")
             return self.to_buy(building=building)
         
