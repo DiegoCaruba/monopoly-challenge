@@ -28,7 +28,6 @@ class Rules:
 
     
     def get_current_building(self, new_position: int) -> Building:
-        print(new_position)
         current_building: Building = list(filter(lambda obj: obj.position == new_position, self.board))
         return current_building[0]
     
@@ -36,31 +35,42 @@ class Rules:
     def get_current_owner(self, behavior: str) -> Player:
         current_owner: Player = list(filter(lambda obj: obj.behavior == behavior, self.players))
         return current_owner[0]
-       
+
+
+    def build_final_result(self, winner: Player, final_result: list[Player]) -> dict:
+        ordered_players: list = sorted(final_result, key=lambda x: x.cash, reverse=True)
+
+        result: dict = {
+            "vencedor": winner.behavior,
+            "jogadores": [player.behavior for player in ordered_players]
+        }
+
+        print(result)
+        return result
+
 
     def monopoly_simulation(self) -> None:
 
-        for round in range(100):
+        final_result: list[Player] = []
+
+        for round in range(1000):
 
             for player in self.players[:]:
-                print(f"Round {round}: Player {(player.behavior).upper()}", end=" ")
 
                 if player.cash < 0:
                     self.clear_property(player)
                     player.clear_properties()
                     self.players.remove(player)
-                    print(f"has left the game")
+                    final_result.append(player)
                     continue
 
                 if len(self.players) == 1:
-                    print("fim")
-                    return 'self.build_final_result()'
+
+                    return self.build_final_result(self.players[0], final_result)
             
                 pace = throw_dice()
-                former_position: int = player.board_position
                 player.set_new_board_position(pace)
                 new_position: int = player.board_position
-                print(f"walks {pace} paces from {former_position} to {new_position}")
 
                 current_building: Building = self.get_current_building(new_position)
 
@@ -73,4 +83,3 @@ class Rules:
                     player.to_pay(rent_value)
                     owner.receive_rent(rent_value)
             
-            print()
