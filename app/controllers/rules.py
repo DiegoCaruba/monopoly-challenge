@@ -3,7 +3,7 @@ import random
 from app.models.player import Player
 from app.models.building import Building
 
-from app.helper.utils import throw_dice
+from app.helper.utils import throw_dice, logger
 
 from app.controllers.properties import properties
 
@@ -37,12 +37,17 @@ class Rules:
         return current_owner[0]
 
 
-    def build_final_result(self, winner: Player, final_result: list[Player]) -> dict:
+    def build_final_result(self, final_result: list[Player]) -> dict:
+
+        final_result = [*final_result, *self.players] if len(final_result) != 4 else final_result
         ordered_players: list = sorted(final_result, key=lambda x: x.cash, reverse=True)
 
+        logger("Jogadores ordenados por saldo:")
+        [logger(f'{i +1}º lugar - Comportamento: {(p.behavior).upper()} | Saldo final: {p.cash} $$') for i, p in enumerate(ordered_players)]
+
         return {
-            "vencedor": winner.behavior,
-            "jogadores": [player.behavior for player in ordered_players]
+            "vencedor": ordered_players[0].behavior,
+            "jogadores": [player.behavior for player in ordered_players[1:]]
         }
 
 
@@ -50,6 +55,10 @@ class Rules:
 
         final_result: list[Player] = []
 
+        logger(f"*** Início: {final_result=} ***")
+        logger("Jogadores ordenados aleatóriamente:")
+        [logger(f' Comportamento: {(p.behavior).upper()} | Saldo inicial: {p.cash} $$ | Quantidade de propriedades: {len(p.properties)}') for p in self.players]
+        
         for round in range(1000):
 
             for player in self.players[:]:
@@ -63,14 +72,15 @@ class Rules:
 
                 if len(self.players) == 1:
 
-                    return self.build_final_result(self.players[0], final_result)
+                    logger(f"*** Fim - Total de rodadas: {round} ***")
+                    final_result.append(player)
+                    return self.build_final_result(final_result)
             
                 pace = throw_dice()
                 player.set_new_board_position(pace)
                 new_position: int = player.board_position
 
                 current_building: Building = self.get_current_building(new_position)
-
                 if current_building.owner is None:
                     player.buy_building(current_building)
                 elif current_building.owner != player.behavior:
@@ -79,4 +89,7 @@ class Rules:
                     
                     player.to_pay(rent_value)
                     owner.receive_rent(rent_value)
-            
+
+        logger(f"*** Fim - Total de roradas: {round} ***")
+        return self.build_final_result(final_result)
+        
