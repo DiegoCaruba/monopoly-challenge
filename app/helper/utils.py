@@ -1,9 +1,15 @@
-import random
+import logging
+from random import choice, randint
 
 
 def flip_a_coin():
-    return random.choice([True, False])
+    return choice([True, False])
 
 
 def throw_dice() -> int:
-    return random.randint(1, 6)
+    return randint(1, 6)
+
+
+logging.basicConfig(level=logging.INFO)
+def logger(msg: str):
+    logging.info(msg)

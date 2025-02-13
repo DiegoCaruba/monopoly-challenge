@@ -16,7 +16,7 @@ class Rules:
             Player(behavior="cauteloso"),
             Player(behavior="aleatorio")
         ]
-        # random.shuffle(self.players)
+        random.shuffle(self.players)
         self.board: list[Building] = properties
 
     
@@ -40,13 +40,10 @@ class Rules:
     def build_final_result(self, winner: Player, final_result: list[Player]) -> dict:
         ordered_players: list = sorted(final_result, key=lambda x: x.cash, reverse=True)
 
-        result: dict = {
+        return {
             "vencedor": winner.behavior,
             "jogadores": [player.behavior for player in ordered_players]
         }
-
-        print(result)
-        return result
 
 
     def monopoly_simulation(self) -> None:
