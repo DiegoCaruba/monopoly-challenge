@@ -2,7 +2,7 @@ from app.models.building import Building
 
 class PlayerType:
 
-    def __init___(self, behavior: str):
+    def __init__(self, behavior: str):
         self.behavior: str = behavior
         self.cash: int = 300
         self.properties: list = []

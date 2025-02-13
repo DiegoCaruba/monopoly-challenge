@@ -4,27 +4,32 @@ from app.models.player_type import PlayerType
 
 class Player(PlayerType):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, behavior: str):
+        super().__init__(behavior=behavior)
 
 
     def buy_building(self, building: Building) -> bool:
-
+        print(f"{building.building_id} - {building.selling_price}".upper())
         if self.behavior == "cauteloso":
-            remaining_cash: int = building.selling_price - self.cash
+            remaining_cash: int = self.cash - building.selling_price
             if remaining_cash >= 80:
-                self.to_buy(building=building)
+                return self.to_buy(building=building)
+            return False
 
         elif self.behavior == "aleatorio":
             if flip_a_coin():
-                self.to_buy(building=building)
+                
+                return self.to_buy(building=building)
+            return False
 
         elif self.behavior == "exigente":
+            print(f"{building.rent_price}")
             if building.rent_price > 50:
-                self.to_buy(building=building)
+                print("exigente")
+                return self.to_buy(building=building)
+            return False
 
         elif self.behavior == "impulsivo":
-            self.to_buy(building=building)
+            print("impulsivo")
+            return self.to_buy(building=building)
         
-        else:
-            return False
